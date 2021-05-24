@@ -48,7 +48,24 @@ app.get('/blogs', (req, res) => {
     })
 } )
 
-
+app.get("/:id", (req, res) => {
+    Blogs.findById(req.params.id)
+    .then((data) => {
+      if (!data) {
+        return res.status(404).send({
+          message: "Data not found with id " + req.params.id
+        });
+      }
+      res.status(200).send(data);
+      console.log(data);
+    })
+    .catch((err) => {
+        return res.status(500).send({
+          message: "Error retrieving data with id " + req.params.id,
+        });
+      }) 
+    
+});
 
 // Listner 
 app.listen(port, ()=> console.log(`listening to localhost: ${port} `));
