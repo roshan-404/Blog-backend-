@@ -1,6 +1,6 @@
 import express from "express"
 import mongoose from "mongoose"
-import Blogs from "./dbblogs.js"
+import blogs from "./dbblogs.js"
 import Cors from "cors"
 
 
@@ -27,7 +27,7 @@ app.get('/',(req , res) => res.status(200).send("HELLO PEOPLE"))
 app.post('/blogs', (req, res) => {
     const dbblogs = req.body;
 
-    Blogs.create(dbblogs, (err, data) => {
+    blogs.create(dbblogs, (err, data) => {
         if(err) {
             res.status(500).send(err)
         }else{
@@ -39,7 +39,7 @@ app.post('/blogs', (req, res) => {
 
 app.get('/blogs', (req, res) => {
 
-    Blogs.find( (err, data) => {
+    blogs.find( (err, data) => {
         if(err) {
             res.status(500).send(err)
         }else{
@@ -48,27 +48,8 @@ app.get('/blogs', (req, res) => {
     })
 } )
 
-// app.get("/:id", (req, res) => {
-//     Blogs.findById(req.params.id)
-//     .then((data) => {
-//       if (!data) {
-//         return res.status(404).send({
-//           message: "Data not found with id " + req.params.id
-//         });
-//       }
-//       res.status(200).send(data);
-//       console.log(data);
-//     })
-//     .catch((err) => {
-//         return res.status(500).send({
-//           message: "Error retrieving data with id " + req.params.id,
-//         });
-//       }) 
-    
-// });
-app.get("/blogs/:id", (req, res) => {
-    console.log(req.params.id);
-    Blogs.findById(req.params.id)
+app.get("/blogs/:id", async (req, res) => {
+    blogs.findById(req.params.id)
       .then((data) => {
         if (!data) {
           return res.status(404).send({
@@ -83,10 +64,11 @@ app.get("/blogs/:id", (req, res) => {
           message: "Error retrieving data with id " + req.params.id
         });
       });
+
   });
 
   app.delete("/blogs/:id", (req, res) => {
-    Blogs.findByIdAndRemove(req.params.id)
+    blogs.findByIdAndRemove(req.params.id)
       .then((data) => {
         if (!data) {
           return res.status(404).send({
